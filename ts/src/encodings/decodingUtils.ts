@@ -66,6 +66,16 @@ export function decodeByteRle(buffer: Uint8Array, numBytes: number, pos: IntWrap
 export function decodeFloatsLE(encodedValues: Uint8Array, pos: IntWrapper, numValues: number): Float32Array {
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float32Array.BYTES_PER_ELEMENT;
+    const byteLength = newOffset - currentPos;
+    
+    if (byteLength % Float32Array.BYTES_PER_ELEMENT !== 0) {
+        throw new Error(
+            `Invalid buffer length for Float32Array: ${byteLength} bytes. ` +
+            `Must be a multiple of ${Float32Array.BYTES_PER_ELEMENT}. ` +
+            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
+        );
+    }
+    
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float32Array(newBuf);
     pos.set(newOffset);
@@ -75,6 +85,16 @@ export function decodeFloatsLE(encodedValues: Uint8Array, pos: IntWrapper, numVa
 export function decodeDoublesLE(encodedValues: Uint8Array, pos: IntWrapper, numValues: number): Float64Array {
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float64Array.BYTES_PER_ELEMENT;
+    const byteLength = newOffset - currentPos;
+    
+    if (byteLength % Float64Array.BYTES_PER_ELEMENT !== 0) {
+        throw new Error(
+            `Invalid buffer length for Float64Array: ${byteLength} bytes. ` +
+            `Must be a multiple of ${Float64Array.BYTES_PER_ELEMENT}. ` +
+            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
+        );
+    }
+    
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float64Array(newBuf);
     pos.set(newOffset);
@@ -89,6 +109,16 @@ export function decodeNullableFloatsLE(
 ): Float32Array {
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float32Array.BYTES_PER_ELEMENT;
+    const byteLength = newOffset - currentPos;
+    
+    if (byteLength % Float32Array.BYTES_PER_ELEMENT !== 0) {
+        throw new Error(
+            `Invalid buffer length for Float32Array: ${byteLength} bytes. ` +
+            `Must be a multiple of ${Float32Array.BYTES_PER_ELEMENT}. ` +
+            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
+        );
+    }
+    
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float32Array(newBuf);
     pos.set(newOffset);
@@ -111,6 +141,16 @@ export function decodeNullableDoublesLE(
 ): Float64Array {
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float64Array.BYTES_PER_ELEMENT;
+    const byteLength = newOffset - currentPos;
+    
+    if (byteLength % Float64Array.BYTES_PER_ELEMENT !== 0) {
+        throw new Error(
+            `Invalid buffer length for Float64Array: ${byteLength} bytes. ` +
+            `Must be a multiple of ${Float64Array.BYTES_PER_ELEMENT}. ` +
+            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
+        );
+    }
+    
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float64Array(newBuf);
     pos.set(newOffset);

@@ -305,7 +305,13 @@ export default class IntegerStreamDecoder {
             return decodedValues;
         }
 
-        throw new Error("Only delta encoding is supported for transforming length to offset streams yet.");
+        throw new Error(
+            `Only delta encoding is supported for transforming length to offset streams yet. ` +
+            `This tile uses unsupported encoding combination: ` +
+            `logicalLevelTechnique1=${streamMetadata.logicalLevelTechnique1}, ` +
+            `logicalLevelTechnique2=${streamMetadata.logicalLevelTechnique2}, ` +
+            `physicalLevelTechnique=${streamMetadata.physicalLevelTechnique}`
+        );
     }
 
     public static decodeNullableIntStream(

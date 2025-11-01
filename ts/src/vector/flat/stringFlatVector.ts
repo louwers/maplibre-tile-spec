@@ -8,11 +8,23 @@ export class StringFlatVector extends VariableSizeVector<Uint8Array, string> {
     private readonly textEncoder: TextEncoder;
 
     constructor(name: string, offsetBuffer: Int32Array, dataBuffer: Uint8Array, nullabilityBuffer?: BitVector) {
+        if (!offsetBuffer) {
+            throw new Error(`Cannot create StringFlatVector '${name}': offsetBuffer is null or undefined`);
+        }
+        if (!dataBuffer) {
+            throw new Error(`Cannot create StringFlatVector '${name}': dataBuffer is null or undefined`);
+        }
         super(name, offsetBuffer, dataBuffer, nullabilityBuffer ?? offsetBuffer.length - 1);
         this.textEncoder = new TextEncoder();
     }
 
     protected getValueFromBuffer(index: number): string {
+        if (!this.offsetBuffer) {
+            throw new Error("offsetBuffer is null or undefined");
+        }
+        if (index < 0 || index >= this.offsetBuffer.length - 1) {
+            throw new Error(`Index ${index} out of bounds for offsetBuffer of length ${this.offsetBuffer.length}`);
+        }
         const start = this.offsetBuffer[index];
         const end = this.offsetBuffer[index + 1];
         return decodeString(this.dataBuffer, start, end);

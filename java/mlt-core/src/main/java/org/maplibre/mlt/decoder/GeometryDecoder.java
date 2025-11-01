@@ -52,7 +52,9 @@ public class GeometryDecoder {
                   IntegerDecoder.decodeIntStream(tile, offset, geometryStreamMetadata, false);
               break;
             case TRIANGLES:
-              throw new NotImplementedException("Not implemented yet.");
+              throw new NotImplementedException(
+                  "TRIANGLES geometry type is not implemented yet. "
+                      + "This tile uses triangulated geometries which are not currently supported in the decoder.");
           }
           break;
         case OFFSET:
