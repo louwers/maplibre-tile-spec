@@ -99,6 +99,12 @@ export class StringFsstDictionaryVector extends VariableSizeVector<Uint8Array, s
 
     // TODO: get rid of that conversion
     private offsetToLengthBuffer(offsetBuffer: Int32Array): Uint32Array {
+        if (!offsetBuffer) {
+            throw new Error("offsetBuffer is null or undefined");
+        }
+        if (offsetBuffer.length === 0) {
+            throw new Error("offsetBuffer is empty");
+        }
         const lengthBuffer = new Uint32Array(offsetBuffer.length - 1);
         let previousOffset = offsetBuffer[0];
         for (let i = 1; i < offsetBuffer.length; i++) {

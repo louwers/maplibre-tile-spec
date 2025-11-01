@@ -127,7 +127,11 @@ export function decodeFastPfor(
     byteLength: number,
     offset: IntWrapper,
 ): Int32Array {
-    throw new Error("FastPFor is not implemented yet.");
+    throw new Error(
+        `FastPFor decoding is not implemented yet. ` +
+        `This tile uses FastPFor compression which is not currently supported. ` +
+        `numValues=${numValues}, byteLength=${byteLength}, offset=${offset.get()}`
+    );
 }
 
 export function decodeZigZag(encodedData: Int32Array): void {
