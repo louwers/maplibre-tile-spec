@@ -21,21 +21,6 @@ export class StringFsstDictionaryVector extends VariableSizeVector<Uint8Array, s
         private readonly symbolTableBuffer: Uint8Array,
         nullabilityBuffer: BitVector,
     ) {
-        if (!indexBuffer) {
-            throw new Error(`Cannot create StringFsstDictionaryVector '${name}': indexBuffer is null or undefined`);
-        }
-        if (!offsetBuffer) {
-            throw new Error(`Cannot create StringFsstDictionaryVector '${name}': offsetBuffer is null or undefined`);
-        }
-        if (!dictionaryBuffer) {
-            throw new Error(`Cannot create StringFsstDictionaryVector '${name}': dictionaryBuffer is null or undefined`);
-        }
-        if (!symbolOffsetBuffer) {
-            throw new Error(`Cannot create StringFsstDictionaryVector '${name}': symbolOffsetBuffer is null or undefined`);
-        }
-        if (!symbolTableBuffer) {
-            throw new Error(`Cannot create StringFsstDictionaryVector '${name}': symbolTableBuffer is null or undefined`);
-        }
         super(name, offsetBuffer, dictionaryBuffer, nullabilityBuffer);
         this.textEncoder = new TextEncoder();
     }

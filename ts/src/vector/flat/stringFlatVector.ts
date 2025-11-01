@@ -11,22 +11,26 @@ export class StringFlatVector extends VariableSizeVector<Uint8Array, string> {
         if (!offsetBuffer) {
             throw new Error(`Cannot create StringFlatVector '${name}': offsetBuffer is null or undefined`);
         }
-        if (!dataBuffer) {
-            throw new Error(`Cannot create StringFlatVector '${name}': dataBuffer is null or undefined`);
-        }
         super(name, offsetBuffer, dataBuffer, nullabilityBuffer ?? offsetBuffer.length - 1);
         this.textEncoder = new TextEncoder();
     }
 
     protected getValueFromBuffer(index: number): string {
         if (!this.offsetBuffer) {
-            throw new Error("offsetBuffer is null or undefined");
+            throw new Error("offsetBuffer is null or undefined when attempting to access value");
         }
-        if (index < 0 || index >= this.offsetBuffer.length - 1) {
-            throw new Error(`Index ${index} out of bounds for offsetBuffer of length ${this.offsetBuffer.length}`);
+        if (!this.dataBuffer) {
+            // Empty data buffer - return empty string
+            return "";
         }
         const start = this.offsetBuffer[index];
         const end = this.offsetBuffer[index + 1];
+        if (start === undefined || end === undefined) {
+            throw new Error(
+                `Index ${index} out of bounds for offsetBuffer of length ${this.offsetBuffer.length}. ` +
+                `Cannot access offsetBuffer[${index}]=${start} or offsetBuffer[${index + 1}]=${end}`
+            );
+        }
         return decodeString(this.dataBuffer, start, end);
     }
 
