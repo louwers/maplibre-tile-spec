@@ -16,9 +16,6 @@ export class StringFlatVector extends VariableSizeVector<Uint8Array, string> {
     }
 
     protected getValueFromBuffer(index: number): string {
-        if (!this.offsetBuffer) {
-            throw new Error("offsetBuffer is null or undefined when attempting to access value");
-        }
         if (!this.dataBuffer) {
             // Empty data buffer - return empty string
             return "";

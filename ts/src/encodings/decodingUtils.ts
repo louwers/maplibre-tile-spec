@@ -3,6 +3,23 @@ import { VectorType } from "../vector/vectorType";
 import BitVector from "../vector/flat/bitVector";
 import { StreamMetadataDecoder } from "../metadata/tile/streamMetadataDecoder";
 
+function validateTypedArrayAlignment(
+    byteLength: number,
+    bytesPerElement: number,
+    typeName: string,
+    numValues: number,
+    currentPos: number,
+    newOffset: number,
+): void {
+    if (byteLength % bytesPerElement !== 0) {
+        throw new Error(
+            `Invalid buffer length for ${typeName}: ${byteLength} bytes. ` +
+                `Must be a multiple of ${bytesPerElement}. ` +
+                `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`,
+        );
+    }
+}
+
 export function skipColumn(numStreams: number, tile: Uint8Array, offset: IntWrapper) {
     //TODO: add size of column in Mlt for fast skipping
     for (let i = 0; i < numStreams; i++) {
@@ -67,15 +84,9 @@ export function decodeFloatsLE(encodedValues: Uint8Array, pos: IntWrapper, numVa
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float32Array.BYTES_PER_ELEMENT;
     const byteLength = newOffset - currentPos;
-    
-    if (byteLength % Float32Array.BYTES_PER_ELEMENT !== 0) {
-        throw new Error(
-            `Invalid buffer length for Float32Array: ${byteLength} bytes. ` +
-            `Must be a multiple of ${Float32Array.BYTES_PER_ELEMENT}. ` +
-            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
-        );
-    }
-    
+
+    validateTypedArrayAlignment(byteLength, Float32Array.BYTES_PER_ELEMENT, "Float32Array", numValues, currentPos, newOffset);
+
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float32Array(newBuf);
     pos.set(newOffset);
@@ -86,15 +97,9 @@ export function decodeDoublesLE(encodedValues: Uint8Array, pos: IntWrapper, numV
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float64Array.BYTES_PER_ELEMENT;
     const byteLength = newOffset - currentPos;
-    
-    if (byteLength % Float64Array.BYTES_PER_ELEMENT !== 0) {
-        throw new Error(
-            `Invalid buffer length for Float64Array: ${byteLength} bytes. ` +
-            `Must be a multiple of ${Float64Array.BYTES_PER_ELEMENT}. ` +
-            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
-        );
-    }
-    
+
+    validateTypedArrayAlignment(byteLength, Float64Array.BYTES_PER_ELEMENT, "Float64Array", numValues, currentPos, newOffset);
+
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float64Array(newBuf);
     pos.set(newOffset);
@@ -110,15 +115,9 @@ export function decodeNullableFloatsLE(
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float32Array.BYTES_PER_ELEMENT;
     const byteLength = newOffset - currentPos;
-    
-    if (byteLength % Float32Array.BYTES_PER_ELEMENT !== 0) {
-        throw new Error(
-            `Invalid buffer length for Float32Array: ${byteLength} bytes. ` +
-            `Must be a multiple of ${Float32Array.BYTES_PER_ELEMENT}. ` +
-            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
-        );
-    }
-    
+
+    validateTypedArrayAlignment(byteLength, Float32Array.BYTES_PER_ELEMENT, "Float32Array", numValues, currentPos, newOffset);
+
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float32Array(newBuf);
     pos.set(newOffset);
@@ -142,15 +141,9 @@ export function decodeNullableDoublesLE(
     const currentPos = pos.get();
     const newOffset = currentPos + numValues * Float64Array.BYTES_PER_ELEMENT;
     const byteLength = newOffset - currentPos;
-    
-    if (byteLength % Float64Array.BYTES_PER_ELEMENT !== 0) {
-        throw new Error(
-            `Invalid buffer length for Float64Array: ${byteLength} bytes. ` +
-            `Must be a multiple of ${Float64Array.BYTES_PER_ELEMENT}. ` +
-            `numValues=${numValues}, currentPos=${currentPos}, newOffset=${newOffset}`
-        );
-    }
-    
+
+    validateTypedArrayAlignment(byteLength, Float64Array.BYTES_PER_ELEMENT, "Float64Array", numValues, currentPos, newOffset);
+
     const newBuf = new Uint8Array(encodedValues.subarray(currentPos, newOffset)).buffer;
     const fb = new Float64Array(newBuf);
     pos.set(newOffset);
